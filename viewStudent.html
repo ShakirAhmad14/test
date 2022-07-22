@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch</title>
+
+    <style>
+        #tbl {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        #tbl td {
+            width: 40px;
+            height: 50px;
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+
+        .thead {
+            width: 100%;
+            background-color: grey;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        button,
+        a {
+            padding: .6rem .9rem;
+            font-weight: bold;
+            color: white;
+            outline: none;
+            border: 1px solid blue;
+            border-radius: 8px;
+            margin-top: 1rem;
+            background-color: rgb(78, 78, 209);
+            text-decoration: none;
+
+        }
+
+        .btn {
+            margin: 10px;
+        }
+
+        #first:nth-child(even) {
+            background-color: #eee;
+        }
+
+        #first:nth-child(even) {
+            background-color: #e000;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="window.location.href='addStudents.html'">Create Student</button>
+    <div>
+        <h1>Data Fetching From Server...</h1>
+    </div>
+    <!-- <script src="../Shakir/JS/fetchliveServer.js"></script> -->
+    <table id="tbl">
+        <thead class="thead">
+            <tr id="first">
+                <td>Id</td>
+                <td>Roll No</td>
+                <td>Gender</td>
+                <td>Email</td>
+                <td>Address</td>
+                <td>Reg-No</td>
+                <td>Update</td>
+                <td>Delete</td>
+
+            </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+    </table>
+
+    <script>
+        let tbody = document.querySelector("tbody");
+        getStudent();
+        function getStudent() {
+            fetch("https://api.logichubss.com/api/students")
+                .then(response => response.json())
+                .then(students => {
+                    let trs = "";
+                    students.map((student) => {
+
+                        trs += `
+          <tr  id="first">
+                <td>${student.id}</td>
+                <td>${student.name}</td>
+                <td>${student.gender}</td>
+                <td>${student.email}</td>
+                <td>${student.address}</td>
+                <td>${student.regNo}</td>
+                <div id="btnDiv">
+                <td><a class="btn" href='#' id="update-btn">Update</a></td>
+                <td><a   class="btn" href="#" onclick=deleteStudent(id) >Delete </a></td>
+                </div>
+            </tr>
+        `;
+                    })
+                    tbody.innerHTML = trs
+                })
+                .catch((error) => { console.log(error) });
+
+
+            function deleteStudent(id) {
+                // let student = new FormData(this);
+                fetch(`https://api.logichubss.com/api/students/delete?id=${student.id}`, {
+                    method: "DELETE",
+                    body: new FormData(this)
+                })
+                    .then(response => response)
+                    .then(data => {
+                        console.log(data);
+                        getStudent();
+                    })
+                    .catch((error) => { console.log(error) });
+            }
+        }
+
+    </script>
+</body>
+
+</html>
